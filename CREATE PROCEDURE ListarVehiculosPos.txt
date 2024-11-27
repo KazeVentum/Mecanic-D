@@ -1,0 +1,32 @@
+CREATE PROCEDURE ListarVehiculosPosterioresA2018
+AS
+BEGIN
+    SELECT * FROM Vehiculo WHERE anio > 2018;
+END;
+
+CREATE PROCEDURE ActualizarTelefonoUsuario
+    @IdUsuario INT,
+    @NuevoTelefono VARCHAR(15)
+AS
+BEGIN
+    UPDATE Usuario
+    SET telefono = @NuevoTelefono
+    WHERE id_usuario = @IdUsuario;
+END;
+
+CREATE PROCEDURE ContarVehiculosPorMarca
+AS
+BEGIN
+    SELECT marca, COUNT(*) as cantidad
+    FROM Vehiculo
+    GROUP BY marca;
+END;
+
+CREATE PROCEDURE MarcasConMasDeDosVehiculos
+AS
+BEGIN
+    SELECT marca, COUNT(*) as cantidad
+    FROM Vehiculo
+    GROUP BY marca
+    HAVING COUNT(*) >= 2;
+END;
