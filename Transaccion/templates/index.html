@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Procedimientos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="text-center mb-4">Procedimientos Almacenados</h1>
+
+        <!-- Botones para los procedimientos -->
+        <div class="text-center mb-4">
+            <button class="btn btn-primary" id="btn-obtener-usuarios">Obtener Usuarios</button>
+            <button class="btn btn-secondary" id="btn-contar-vehiculos">Contar Vehículos</button>
+            <button class="btn btn-primary" id="btn-contar-xs">xs Vehículos</button>
+            <!-- Agregar más botones según lo necesites -->
+        </div>
+
+
+        <div id="resultados" class="row">
+            
+        </div>
+    </div>
+
+    <!-- Cargar el archivo JavaScript -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
