@@ -45,4 +45,11 @@ document.addEventListener('DOMContentLoaded', function() {
         llamarProcedimiento('/vehiculos_post2018');
     });
 
+    document.getElementById('btn-contar-vehiculoXMarca').addEventListener('click', function() {
+        llamarProcedimiento('/contarAutoXMarca');
+    });
+
+    document.getElementById('btn-contar-VehiculosPorMarcaMinima').addEventListener('click', function() {
+        llamarProcedimiento('/vehiculosPorMarcaMinima');
+    });
 });

@@ -8,7 +8,7 @@ app = Flask(__name__)
 def get_db_connection():
     return pyodbc.connect(
         "DRIVER={ODBC Driver 17 for SQL Server};"
-        "SERVER=CHRIS\\SQLEXPRESS;DATABASE=Mechanic-D;"
+        "SERVER=DESKTOP-2KUH2GO\\SQLEXPRESS;DATABASE=Mechanic-D;"
         "Trusted_Connection=yes;"
     )
 
@@ -58,6 +58,44 @@ def vehiculos_post2018():
     finally:
         cursor.close()
         conn.close()
+
+# Ruta para mostrar vehiculos y sus marcas
+@app.route('/contarAutoXMarca')
+def contarAutoXMarca():
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("EXEC ContarVehiculosPorMarca")
+        resultados = cursor.fetchall()
+        # Devolver los resultados en formato JSON
+        vehiculos = [{"marca": row[0], "Cantidad": row[1]} for row in resultados]
+        return jsonify(vehiculos)
+    
+    except Exception as e:
+        return jsonify({"error": str(e)})
+    finally:
+        cursor.close()
+        conn.close()
+
+
+@app.route('/vehiculosPorMarcaMinima')
+def vehiculosPorMarcaMinima():
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("EXEC ContarVehiculosPorMarcaMinima")
+        resultados = cursor.fetchall()
+        # Devolver los resultados en formato JSON
+        vehiculos = [{"Marca": row[0], "cantidad": row[1]} for row in resultados]
+        return jsonify(vehiculos)
+    
+    except Exception as e:
+        return jsonify({"error": str(e)})
+    finally:
+        cursor.close()
+        conn.close()
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

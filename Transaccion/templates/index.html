@@ -9,12 +9,12 @@
     <div class="container mt-4">
         <h1 class="text-center mb-4">Procedimientos Almacenados</h1>
 
-        <!-- Botones para los procedimientos -->
         <div class="text-center mb-4">
             <button class="btn btn-primary" id="btn-obtener-usuarios">Obtener Usuarios</button>
-            <button class="btn btn-secondary" id="btn-contar-vehiculos">Contar Vehículos</button>
-            <button class="btn btn-primary" id="btn-contar-xs">xs Vehículos</button>
-            <!-- Agregar más botones según lo necesites -->
+            <button class="btn btn-secondary" id="btn-contar-vehiculos">Mostrar marcas de Vehiculos Post 2018</button>
+            <button class="btn btn-primary" id="btn-contar-vehiculoXMarca">Contar Vehiculos X Marca</button>
+            <button class="btn btn-secondary" id="btn-contar-VehiculosPorMarcaMinima">Contar marcas que tengan mas de 2 Registrados</button>
+            
         </div>
 
 
@@ -23,7 +23,6 @@
         </div>
     </div>
 
-    <!-- Cargar el archivo JavaScript -->
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>
