@@ -1,5 +1,5 @@
 
-# Documentación del Proyecto
+# Mechanic-D
 
 Este proyecto implementa un sistema web que interactúa con procedimientos almacenados en SQL Server, utilizando Flask como backend y JavaScript con Bootstrap para el frontend.
 
