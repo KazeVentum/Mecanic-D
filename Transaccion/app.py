@@ -95,6 +95,75 @@ def vehiculosPorMarcaMinima():
         cursor.close()
         conn.close()
 
+@app.route('/solicitudesOrdenadas')
+def solicitudesOrdenadas():
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("EXEC ObtenerSolicitudesOrdenadas")
+        resultados = cursor.fetchall()
+        # Devolver los resultados en formato JSON
+        vehiculos = [{"Descripcion De Falla": row[3], "Ubicacion Actual": row[4], "Estado": row[5], "Fecha de Solicitud": row[6]} for row in resultados]
+        return jsonify(vehiculos)
+    
+    except Exception as e:
+        return jsonify({"error": str(e)})
+    finally:
+        cursor.close()
+        conn.close()
+
+@app.route('/top5autosantiguos')
+def top5autosantiguos():
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("EXEC ObtenerTop5VehiculosAntiguos")
+        resultados = cursor.fetchall()
+        # Devolver los resultados en formato JSON
+        vehiculos = [{"Marca": row[1], "modelo": row[2], "año": row[3], "placa": row[4]} for row in resultados]
+        return jsonify(vehiculos)
+    
+    except Exception as e:
+        return jsonify({"error": str(e)})
+    finally:
+        cursor.close()
+        conn.close()
+
+
+@app.route('/marcasDistintas')
+def marcasDistintas():
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("EXEC ObtenerMarcasUnicas")
+        resultados = cursor.fetchall()
+        # Devolver los resultados en formato JSON
+        vehiculos = [{"Marca": row[0]} for row in resultados]
+        return jsonify(vehiculos)
+    
+    except Exception as e:
+        return jsonify({"error": str(e)})
+    finally:
+        cursor.close()
+        conn.close()
+
+@app.route('/solicitudesIncompletas')
+def solicitudesIncompletas():
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("EXEC ObtenerSolicitudesNoCompletadas")
+        resultados = cursor.fetchall()
+        # Devolver los resultados en formato JSON
+        vehiculos = [{"Descripcion Falla": row[3], "ubicacion Actual": row[4], "estado": row[5], "Fecha de la solicitud": row[6]}  for row in resultados]
+        return jsonify(vehiculos)
+    
+    except Exception as e:
+        return jsonify({"error": str(e)})
+    finally:
+        cursor.close()
+        conn.close()
+
 
 
 if __name__ == '__main__':
