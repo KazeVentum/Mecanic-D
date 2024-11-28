@@ -52,4 +52,20 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('btn-contar-VehiculosPorMarcaMinima').addEventListener('click', function() {
         llamarProcedimiento('/vehiculosPorMarcaMinima');
     });
+
+    document.getElementById('btn-solicitudes-ordenadas').addEventListener('click', function() {
+        llamarProcedimiento('/solicitudesOrdenadas');
+    });
+
+    document.getElementById('btn-top5autosantiguos').addEventListener('click', function() {
+        llamarProcedimiento('/top5autosantiguos');
+    });
+
+    document.getElementById('btn-marcasDistintas').addEventListener('click', function() {
+        llamarProcedimiento('/marcasDistintas');
+    });
+
+    document.getElementById('btn-solicitudesIncompletas').addEventListener('click', function() {
+        llamarProcedimiento('/solicitudesIncompletas');
+    });
 });
