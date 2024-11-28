@@ -93,7 +93,7 @@ La interfaz presenta botones para ejecutar procedimientos almacenados en SQL Ser
 - **Contar Vehículos Posteriores a 2018**: Filtra vehículos registrados después de 2018.  
 - **contar vehículos x marca**: Consulta cuantos vehículos de cada marca están disponibles
 - **Mostrar solicitudes ordenadas de manera descendente**: Consulta las solicitudes ordenadas de manera descendente.
--**mostrar los 5 vehículos más antiguos**: consultara cuales son los 5 vehículos más antiguos de la base de datos.
+- **Mostrar los 5 vehículos más antiguos**: consultara cuales son los 5 vehículos más antiguos de la base de datos.
 - **Obtener las marcas únicas distintas**: Obtiene las marcas distintas
 - **Mostrar los carros de marca Toyota superiores al año 2015**: Consultara en la base de datos que automóviles de marca Toyota son superiores al año 2015
 - **Mostrar las solicitudes que no están completas**: Mostrara las solicitudes que no estén completadas, o que no tengan el estado "Completado  
