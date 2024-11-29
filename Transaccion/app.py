@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 from collections import OrderedDict
 import pyodbc
 
@@ -8,14 +8,14 @@ app = Flask(__name__)
 def get_db_connection():
     return pyodbc.connect(
         "DRIVER={ODBC Driver 17 for SQL Server};"
-        "SERVER=DESKTOP-2KUH2GO\\SQLEXPRESS;DATABASE=Mechanic-D;"
+        "SERVER=CHRIS\\SQLEXPRESS;DATABASE=Mechanic-D;"
         "Trusted_Connection=yes;"
     )
 
 # Ruta para renderizar el frontend
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return render_template('index2.html')
 
 # Ruta para obtener datos de usuarios
 @app.route('/usuarios')
@@ -65,7 +65,7 @@ def contarAutoXMarca():
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("EXEC ContarVehiculosPorMarca")
+        cursor.execute("SELECT marca, COUNT(*) AS cantidad FROM Vehiculos.Vehiculo GROUP BY marca;")
         resultados = cursor.fetchall()
         # Devolver los resultados en formato JSON
         vehiculos = [{"marca": row[0], "Cantidad": row[1]} for row in resultados]
@@ -83,7 +83,7 @@ def vehiculosPorMarcaMinima():
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("EXEC ContarVehiculosPorMarcaMinima")
+        cursor.execute("SELECT marca, COUNT(*) AS cantidad FROM Vehiculos.vehiculo GROUP BY marca HAVING COUNT(*) >= 2;")
         resultados = cursor.fetchall()
         # Devolver los resultados en formato JSON
         vehiculos = [{"Marca": row[0], "cantidad": row[1]} for row in resultados]
@@ -100,7 +100,7 @@ def solicitudesOrdenadas():
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("EXEC ObtenerSolicitudesOrdenadas")
+        cursor.execute("SELECT * FROM Solicitud ORDER BY fecha_solicitud DESC;")
         resultados = cursor.fetchall()
         # Devolver los resultados en formato JSON
         vehiculos = [{"Descripcion De Falla": row[3], "Ubicacion Actual": row[4], "Estado": row[5], "Fecha de Solicitud": row[6]} for row in resultados]
@@ -117,7 +117,7 @@ def top5autosantiguos():
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("EXEC ObtenerTop5VehiculosAntiguos")
+        cursor.execute("SELECT TOP 5 id_vehiculo, marca, modelo, anio, placa FROM Vehiculos.Vehiculo ORDER BY anio ASC;")
         resultados = cursor.fetchall()
         # Devolver los resultados en formato JSON
         vehiculos = [{"Marca": row[1], "modelo": row[2], "año": row[3], "placa": row[4]} for row in resultados]
@@ -135,7 +135,7 @@ def marcasDistintas():
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("EXEC ObtenerMarcasUnicas")
+        cursor.execute("SELECT DISTINCT marca FROM Vehiculos.Vehiculo ORDER BY marca ASC;")
         resultados = cursor.fetchall()
         # Devolver los resultados en formato JSON
         vehiculos = [{"Marca": row[0]} for row in resultados]
@@ -147,19 +147,54 @@ def marcasDistintas():
         cursor.close()
         conn.close()
 
-@app.route('/solicitudesIncompletas')
-def solicitudesIncompletas():
+
+@app.route('/insertar_vehiculo', methods=['POST'])
+def insertar_vehiculo():
+    try:
+        # Obtener los datos del frontend (JSON)
+        data = request.json
+        
+        # Establecer la conexión a la base de datos
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # Ejecutar el procedimiento almacenado
+        cursor.execute("EXEC InsertarVehiculo ?, ?, ?, ?, ?, ?", 
+                       data['marca'], 
+                       data['modelo'], 
+                       data['anio'], 
+                       data['id_usuario'], 
+                       data['placa'], 
+                       data['tipo_de_vehiculo_id'])
+        
+        # Confirmar la inserción
+        conn.commit()
+
+        return jsonify({"message": "Vehículo insertado correctamente"}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+    finally:
+        cursor.close()
+        conn.close()
+
+
+@app.route('/obtener_alertas', methods=['GET'])
+def obtener_alertas():
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("EXEC ObtenerSolicitudesNoCompletadas")
-        resultados = cursor.fetchall()
-        # Devolver los resultados en formato JSON
-        vehiculos = [{"Descripcion Falla": row[3], "ubicacion Actual": row[4], "estado": row[5], "Fecha de la solicitud": row[6]}  for row in resultados]
-        return jsonify(vehiculos)
+        
+        # Consultamos las alertas generadas por el trigger
+        cursor.execute("SELECT TOP 1 mensaje, tipo, fecha FROM Alerta ORDER BY id_alerta DESC;")
+        alertas = cursor.fetchall()
+        
+        # Devolver las alertas como JSON
+        alertas_lista = [{"mensaje": row[0], "tipo": row[1], "fecha": row[2]} for row in alertas]
+        return jsonify(alertas_lista)
     
     except Exception as e:
-        return jsonify({"error": str(e)})
+        return jsonify({"error": str(e)}), 400
     finally:
         cursor.close()
         conn.close()
